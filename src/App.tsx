@@ -1,8 +1,8 @@
+// App.tsx
 import React, { useState, useEffect } from "react";
 import YouTube from "react-youtube";
 import styled from "styled-components";
 
-// Type for song data
 type Song = {
   id: number;
   title: string;
@@ -12,7 +12,6 @@ type Song = {
   timeSignature: string;
 };
 
-// Example song data stored as JSON-like array
 const songs: Song[] = [
   {
     id: 1,
@@ -32,7 +31,6 @@ const songs: Song[] = [
   },
 ];
 
-// Helper to extract videoId from YouTube URL
 const extractVideoId = (url: string): string => {
   const regExp =
     /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^\s&]+)/;
@@ -41,7 +39,6 @@ const extractVideoId = (url: string): string => {
 };
 
 const App: React.FC = () => {
-  // Game state variables 😎
   const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
   const [guess, setGuess] = useState<string>("");
   const [score, setScore] = useState<number>(0);
@@ -69,16 +66,15 @@ const App: React.FC = () => {
     return () => clearInterval(timerId);
   }, [timeLeft, isGameOver]);
 
-  // Submit guess logic 🎯
+  // Handle guess submission 🎯
   const handleSubmit = () => {
-    if (showAnswer) return; // Prevent duplicate submissions
+    if (showAnswer) return;
     setShowAnswer(true);
     if (guess.trim() === currentSong.timeSignature) {
       setScore((prev) => prev + 10);
     } else {
       setHp((prev) => prev - 1);
     }
-    // Update high score if needed 💾
     const potentialScore =
       guess.trim() === currentSong.timeSignature ? score + 10 : score;
     if (potentialScore > highScore) {
@@ -90,7 +86,7 @@ const App: React.FC = () => {
     }
   };
 
-  // Load next song or reset timer 🎶
+  // Load next song or loop back 🎶
   const handleNext = () => {
     setGuess("");
     setTimeLeft(15);
@@ -98,7 +94,6 @@ const App: React.FC = () => {
     if (currentSongIndex + 1 < songs.length) {
       setCurrentSongIndex(currentSongIndex + 1);
     } else {
-      // Option: loop through songs or shuffle new list
       setCurrentSongIndex(0);
     }
   };
@@ -117,25 +112,23 @@ const App: React.FC = () => {
   return (
     <Container>
       <Header>
-        <HP>
-          {Array(hp).fill('❤️').join('')} (HP: {hp})
-        </HP>
-        <Score>Score: {score}</Score>
-        <HighScore>High Score: {highScore}</HighScore>
+        <StatusItem>❤️ HP: {hp}</StatusItem>
+        <StatusItem>Score: {score}</StatusItem>
+        <StatusItem>High Score: {highScore}</StatusItem>
       </Header>
       {!isGameOver ? (
-        <GameContent>
+        <>
           <VideoContainer>
             <YouTube
               videoId={extractVideoId(currentSong.youtubeUrl)}
               opts={{
+                width: "100%",
+                height: "100%",
                 playerVars: {
                   autoplay: 1,
                   start: currentSong.startTime,
                   end: currentSong.endTime,
                 },
-                width: "100%",
-                height: "100%",
               }}
             />
           </VideoContainer>
@@ -146,20 +139,20 @@ const App: React.FC = () => {
               onChange={(e) => setGuess(e.target.value)}
               placeholder="Enter time signature e.g., 4/4"
             />
-            <button onClick={handleSubmit}>Submit ✅</button>
+            <Button onClick={handleSubmit}>Submit ✅</Button>
             {showAnswer && (
               <Answer>Correct Answer: {currentSong.timeSignature}</Answer>
             )}
-            {showAnswer && <button onClick={handleNext}>Next ▶️</button>}
+            {showAnswer && <Button onClick={handleNext}>Next ▶️</Button>}
           </InputContainer>
           <TimerDisplay>Time Left: {timeLeft} s ⏳</TimerDisplay>
-        </GameContent>
+        </>
       ) : (
         <GameOverContainer>
           <h2>Game Over 😢</h2>
           <FinalScore>Your final score: {score}</FinalScore>
           <HighScoreDisplay>High Score: {highScore}</HighScoreDisplay>
-          <button onClick={handlePlayAgain}>Play Again 🔄</button>
+          <Button onClick={handlePlayAgain}>Play Again 🔄</Button>
         </GameOverContainer>
       )}
     </Container>
@@ -168,188 +161,98 @@ const App: React.FC = () => {
 
 export default App;
 
-/* Styled Components */
+/* Styled Components for a responsive layout */
 const Container = styled.div`
   background-color: #121212;
   color: #fff;
-  max-height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 20px;
 `;
 
 const Header = styled.div`
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  text-align: left;
-  z-index: 10;
-
-  @media (min-width: 768px) {
-    left: 20px;
-    top: 20px;
-  }
-`;
-
-const HP = styled.div`
-  font-size: 1.2em;
-  margin-bottom: 5px;
-
-  @media (min-width: 768px) {
-    font-size: 1.4em;
-  }
-`;
-
-const Score = styled.div`
-  font-size: 1.2em;
-  margin-bottom: 5px;
-
-  @media (min-width: 768px) {
-    font-size: 1.4em;
-  }
-`;
-
-const HighScore = styled.div`
-  font-size: 1.2em;
-
-  @media (min-width: 768px) {
-    font-size: 1.4em;
-  }
-`;
-
-// New component to wrap game content
-const GameContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
   max-width: 1200px;
-  margin-top: 60px;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+`;
 
-  @media (min-width: 768px) {
-    margin-top: 80px;
-  }
+const StatusItem = styled.div`
+  font-size: 1.2em;
+  margin: 5px;
 `;
 
 const VideoContainer = styled.div`
-  margin-top: 60px;
   width: 100%;
-  max-width: 560px;
-  height: 315px;
-
-  @media (min-width: 768px) {
-    max-width: 800px;
-    height: 450px;
-  }
-
-  @media (min-width: 1200px) {
-    max-width: 960px;
-    height: 540px;
-  }
+  max-width: 800px;
+  position: relative;
+  background: #000;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 20px;
 `;
 
 const InputContainer = styled.div`
-  margin-top: 20px;
+  width: 100%;
+  max-width: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  max-width: 400px;
 
   input {
-    padding: 8px;
+    width: 100%;
+    padding: 10px;
     font-size: 1em;
     margin-bottom: 10px;
-    width: 220px;
-
-    @media (min-width: 768px) {
-      width: 300px;
-      font-size: 1.2em;
-      padding: 12px;
-    }
-  }
-
-  button {
-    padding: 8px 16px;
-    margin: 5px;
-    font-size: 1em;
-    cursor: pointer;
-    border: none;
+    box-sizing: border-box;
     border-radius: 4px;
-
-    @media (min-width: 768px) {
-      padding: 12px 24px;
-      font-size: 1.2em;
-    }
+    border: 1px solid #444;
+    background: #222;
+    color: #fff;
   }
+`;
 
-  @media (min-width: 768px) {
-    margin-top: 30px;
+const Button = styled.button`
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: #1e88e5;
+  color: #fff;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #1565c0;
   }
 `;
 
 const Answer = styled.div`
   margin-top: 10px;
   font-size: 1.1em;
-
-  @media (min-width: 768px) {
-    font-size: 1.3em;
-    margin-top: 15px;
-  }
 `;
 
 const TimerDisplay = styled.div`
   margin-top: 10px;
   font-size: 1.2em;
-
-  @media (min-width: 768px) {
-    font-size: 1.5em;
-    margin-top: 20px;
-  }
 `;
 
 const GameOverContainer = styled.div`
   text-align: center;
-  margin-top: 100px;
-
-  @media (min-width: 768px) {
-    margin-top: 120px;
-  }
-
-  button {
-    padding: 8px 16px;
-    margin: 5px;
-    font-size: 1em;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-
-    @media (min-width: 768px) {
-      padding: 12px 24px;
-      font-size: 1.2em;
-    }
-  }
+  margin-top: 50px;
 `;
 
 const FinalScore = styled.div`
   font-size: 1.3em;
   margin-top: 10px;
-
-  @media (min-width: 768px) {
-    font-size: 1.6em;
-    margin-top: 15px;
-  }
 `;
 
 const HighScoreDisplay = styled.div`
   font-size: 1.3em;
   margin-top: 10px;
-
-  @media (min-width: 768px) {
-    font-size: 1.6em;
-    margin-top: 15px;
-    margin-bottom: 20px;
-  }
 `;
