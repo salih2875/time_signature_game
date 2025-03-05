@@ -16,15 +16,15 @@ const songs: Song[] = [
   {
     id: 1,
     title: "Song A",
-    youtubeUrl: "https://www.youtube.com/watch?v=XXXXXXXXXXX",
-    startTime: 75,
-    endTime: 133,
+    youtubeUrl: "https://www.youtube.com/watch?v=zTuD8k3JvxQ",
+    startTime: 15,
+    endTime: 30,
     timeSignature: "5/4",
   },
   {
     id: 2,
     title: "Song B",
-    youtubeUrl: "https://www.youtube.com/watch?v=YYYYYYYYYYY",
+    youtubeUrl: "https://www.youtube.com/watch?v=zTuD8k3JvxQ",
     startTime: 30,
     endTime: 90,
     timeSignature: "7/8",
@@ -58,6 +58,7 @@ const App: React.FC = () => {
     if (isGameOver) return;
     if (timeLeft === 0) {
       handleSubmit();
+      handleNext();
       return;
     }
     const timerId = setInterval(() => {
@@ -112,26 +113,24 @@ const App: React.FC = () => {
   return (
     <Container>
       <Header>
-        <StatusItem>❤️ HP: {hp}</StatusItem>
-        <StatusItem>Score: {score}</StatusItem>
-        <StatusItem>High Score: {highScore}</StatusItem>
+        <HP>❤️ HP: {hp}</HP>
+        <Score>Score: {score}</Score>
+        <HighScore>High Score: {highScore}</HighScore>
       </Header>
       {!isGameOver ? (
         <>
-          <VideoContainer>
-            <YouTube
-              videoId={extractVideoId(currentSong.youtubeUrl)}
-              opts={{
-                width: "100%",
-                height: "100%",
-                playerVars: {
-                  autoplay: 1,
-                  start: currentSong.startTime,
-                  end: currentSong.endTime,
-                },
-              }}
-            />
-          </VideoContainer>
+          <YouTube
+            videoId={extractVideoId(currentSong.youtubeUrl)}
+            opts={{
+              width: "1000px",
+              height: "500px",
+              playerVars: {
+                autoplay: 1,
+                start: currentSong.startTime,
+                end: currentSong.endTime,
+              },
+            }}
+          />
           <InputContainer>
             <input
               type="text"
@@ -166,53 +165,65 @@ const Container = styled.div`
   background-color: #121212;
   color: #fff;
   min-height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 const Header = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  text-align: left;
 `;
 
-const StatusItem = styled.div`
+const HP = styled.div`
   font-size: 1.2em;
-  margin: 5px;
+  margin-bottom: 5px;
 `;
 
-const VideoContainer = styled.div`
-  width: 100%;
-  max-width: 800px;
-  position: relative;
-  background: #000;
-  aspect-ratio: 16 / 9;
-  margin-bottom: 20px;
+const Score = styled.div`
+  font-size: 1.2em;
+  margin-bottom: 5px;
+`;
+
+const HighScore = styled.div`
+  font-size: 1.2em;
 `;
 
 const InputContainer = styled.div`
-  width: 100%;
-  max-width: 800px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
 
   input {
-    width: 100%;
-    padding: 10px;
+    padding: 8px;
     font-size: 1em;
     margin-bottom: 10px;
+    width: 280px; /* Increased width to fit placeholder text */
     box-sizing: border-box;
+
+    &::placeholder {
+      font-size: 0.9em; /* Slightly smaller placeholder text */
+      opacity: 0.8;
+    }
+
+    @media (max-width: 480px) {
+      width: 240px;
+      &::placeholder {
+        font-size: 0.8em;
+      }
+    }
+  }
+
+  button {
+    padding: 8px 16px;
+    margin: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
     border-radius: 4px;
-    border: 1px solid #444;
-    background: #222;
-    color: #fff;
   }
 `;
 
@@ -244,7 +255,7 @@ const TimerDisplay = styled.div`
 
 const GameOverContainer = styled.div`
   text-align: center;
-  margin-top: 50px;
+  margin-top: 100px;
 `;
 
 const FinalScore = styled.div`
