@@ -119,6 +119,7 @@ const App: React.FC = () => {
       </Header>
       {!isGameOver ? (
         <>
+          {/* TODO: adapt video size for mobile */}
           <YouTube
             videoId={extractVideoId(currentSong.youtubeUrl)}
             opts={{
