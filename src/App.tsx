@@ -91,7 +91,7 @@ const App: React.FC = () => {
   const [guess, setGuess] = useState<string>("");
   const [score, setScore] = useState<number>(0);
   const [hp, setHp] = useState<number>(3);
-  const [timeLeft, setTimeLeft] = useState<number>(15);
+  const [timeLeft, setTimeLeft] = useState<number>(90); // Changed to 90 seconds (1:30 minutes)
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [showAnswer, setShowAnswer] = useState<boolean>(false);
   const [highScore, setHighScore] = useState<number>(() => {
@@ -100,6 +100,19 @@ const App: React.FC = () => {
   });
 
   const currentSong = songs[currentSongIndex];
+
+  // Global timer effect ⏳
+  useEffect(() => {
+    if (isGameOver) return;
+    if (timeLeft === 0) {
+      setIsGameOver(true); // End game when global timer runs out
+      return;
+    }
+    const timerId = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timerId);
+  }, [timeLeft, isGameOver]);
 
   // Timer effect ⏳
   useEffect(() => {
@@ -138,7 +151,7 @@ const App: React.FC = () => {
   // Load next song or loop back 🎶
   const handleNext = () => {
     setGuess("");
-    setTimeLeft(15);
+    // Removed setTimeLeft(15) to maintain global timer
     setShowAnswer(false);
     if (currentSongIndex + 1 < songs.length) {
       setCurrentSongIndex(currentSongIndex + 1);
@@ -152,7 +165,7 @@ const App: React.FC = () => {
     setScore(0);
     setHp(3);
     setCurrentSongIndex(0);
-    setTimeLeft(15);
+    setTimeLeft(90); // Reset to 90 seconds (1:30 minutes)
     setIsGameOver(false);
     setShowAnswer(false);
     setGuess("");
@@ -199,7 +212,9 @@ const App: React.FC = () => {
             )}
             {showAnswer && <Button onClick={handleNext}>Next ▶️</Button>}
           </InputContainer>
-          <TimerDisplay>Time Left: {timeLeft} s ⏳</TimerDisplay>
+          <TimerDisplay>
+            Time Left: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')} ⏳
+          </TimerDisplay>
         </>
       ) : (
         <GameOverContainer>
