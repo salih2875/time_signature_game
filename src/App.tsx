@@ -77,7 +77,6 @@ const songs: Song[] = [
     endTime: 30,
     timeSignature: "10/4",
   },
-
 ];
 
 const extractVideoId = (url: string): string => {
@@ -190,7 +189,13 @@ const App: React.FC = () => {
             />
             <Button onClick={handleSubmit}>Submit ✅</Button>
             {showAnswer && (
-              <Answer>Correct Answer: {currentSong.timeSignature}</Answer>
+              <>
+                <Answer correct={guess.trim() === currentSong.timeSignature}>
+                  {guess.trim() === currentSong.timeSignature
+                    ? "✓ Correct!"
+                    : `✗ Wrong! Correct answer: ${currentSong.timeSignature}`}
+                </Answer>
+              </>
             )}
             {showAnswer && <Button onClick={handleNext}>Next ▶️</Button>}
           </InputContainer>
@@ -293,9 +298,11 @@ const Button = styled.button`
   }
 `;
 
-const Answer = styled.div`
+const Answer = styled.div<{ correct: boolean }>`
   margin-top: 10px;
   font-size: 1.1em;
+  color: ${(props) => (props.correct ? "#4caf50" : "#f44336")};
+  font-weight: bold;
 `;
 
 const TimerDisplay = styled.div`
