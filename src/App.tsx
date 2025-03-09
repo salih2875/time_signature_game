@@ -183,14 +183,15 @@ const App: React.FC = () => {
 
   return (
     <Container>
-      <Header>
-        <HP>❤️ HP: {hp}</HP>
-        <Score>Score: {score}</Score>
-        <HighScore>High Score: {highScore}</HighScore>
-      </Header>
+      {!isGameOver && (
+        <Header>
+          <HP>❤️ HP: {hp}</HP>
+          <Score>Score: {score}</Score>
+          <HighScore>High Score: {highScore}</HighScore>
+        </Header>
+      )}
       {!isGameOver ? (
         <>
-          {/* TODO: adapt video size for mobile */}
           <YouTube
             videoId={extractVideoId(currentSong.youtubeUrl)}
             opts={{
@@ -205,7 +206,6 @@ const App: React.FC = () => {
               },
             }}
             onReady={(event) => {
-              // Force play when component is ready
               event.target.playVideo();
             }}
           />
@@ -216,7 +216,7 @@ const App: React.FC = () => {
               onChange={(e) => setGuess(e.target.value)}
               placeholder="Enter time signature e.g., 4/4"
             />
-            <Button onClick={handleSubmit}>Submit ✅</Button>
+            {!showAnswer && <Button onClick={handleSubmit}>Submit ✅</Button>}
             {showAnswer && (
               <>
                 <Answer correct={guess.trim() === currentSong.timeSignature}>
@@ -224,9 +224,9 @@ const App: React.FC = () => {
                     ? "✓ Correct!"
                     : `✗ Wrong! Correct answer: ${currentSong.timeSignature}`}
                 </Answer>
+                <Button onClick={handleNext}>Next ▶️</Button>
               </>
             )}
-            {showAnswer && <Button onClick={handleNext}>Next ▶️</Button>}
           </InputContainer>
           <TimerDisplay>
             Time Left: {Math.floor(timeLeft / 60)}:
@@ -261,11 +261,12 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
-  position: fixed;
-  top: 10px;
-  left: 10px;
+  position: center;
+  // top: 10px;
+  // left: 10px;
   text-align: left;
-  background-color: rgba(0, 0, 0, 0.5);
+  // background-color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 30px;
   padding: 10px;
   border-radius: 8px;
   z-index: 10;
