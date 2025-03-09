@@ -200,7 +200,13 @@ const App: React.FC = () => {
                 autoplay: 1,
                 start: currentSong.startTime,
                 end: currentSong.endTime,
+                mute: 0,
+                controls: 1,
               },
+            }}
+            onReady={(event) => {
+              // Force play when component is ready
+              event.target.playVideo();
             }}
           />
           <InputContainer>
