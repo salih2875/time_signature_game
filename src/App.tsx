@@ -148,16 +148,18 @@ const App: React.FC = () => {
     }
   };
 
-  // Load next song or loop back 🎶
+  // Load next song randomly 🎲
   const handleNext = () => {
     setGuess("");
-    // Removed setTimeLeft(15) to maintain global timer
     setShowAnswer(false);
-    if (currentSongIndex + 1 < songs.length) {
-      setCurrentSongIndex(currentSongIndex + 1);
-    } else {
-      setCurrentSongIndex(0);
-    }
+
+    // Generate a random index different from the current one
+    let randomIndex;
+    do {
+      randomIndex = Math.floor(Math.random() * songs.length);
+    } while (randomIndex === currentSongIndex && songs.length > 1);
+
+    setCurrentSongIndex(randomIndex);
   };
 
   // Reset game on "Play Again"
@@ -213,7 +215,8 @@ const App: React.FC = () => {
             {showAnswer && <Button onClick={handleNext}>Next ▶️</Button>}
           </InputContainer>
           <TimerDisplay>
-            Time Left: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')} ⏳
+            Time Left: {Math.floor(timeLeft / 60)}:
+            {(timeLeft % 60).toString().padStart(2, "0")} ⏳
           </TimerDisplay>
         </>
       ) : (
