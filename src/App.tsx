@@ -131,24 +131,24 @@ const App: React.FC = () => {
   // Handle guess submission 🎯
   const handleSubmit = () => {
     if (showAnswer) return;
-    
+
     if (guess.trim() === currentSong.timeSignature) {
       // Correct answer - add score and move to next song immediately
       setScore((prev) => prev + 10);
-      
+
       // Update high score if needed
       if (score + 10 > highScore) {
         localStorage.setItem("highScore", (score + 10).toString());
         setHighScore(score + 10);
       }
-      
+
       // Move to next song immediately
       handleNext();
     } else {
       // Wrong answer - show the correct answer
       setShowAnswer(true);
       setHp((prev) => prev - 1);
-      
+
       // Check if game over
       if (hp - 1 <= 0) {
         setIsGameOver(true);
@@ -251,10 +251,13 @@ export default App;
 const Container = styled.div`
   background-color: #121212;
   color: #fff;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* Center content vertically */
+  padding: 20px;
+  box-sizing: border-box;
 `;
 
 const Header = styled.div`
@@ -262,6 +265,10 @@ const Header = styled.div`
   top: 10px;
   left: 10px;
   text-align: left;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 8px;
+  z-index: 10;
 `;
 
 const HP = styled.div`
@@ -283,50 +290,51 @@ const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 400px; /* Limit width for better mobile experience */
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
   input {
-    padding: 8px;
+    padding: 10px;
     font-size: 1em;
     margin-bottom: 10px;
-    width: 280px; /* Increased width to fit placeholder text */
+    width: 100%;
     box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #1e1e1e;
+    color: #fff;
 
     &::placeholder {
-      font-size: 0.9em; /* Slightly smaller placeholder text */
-      opacity: 0.8;
+      color: #888;
     }
-
-    @media (max-width: 480px) {
-      width: 240px;
-      &::placeholder {
-        font-size: 0.8em;
-      }
-    }
-  }
-
-  button {
-    padding: 8px 16px;
-    margin: 5px;
-    font-size: 1em;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
   }
 `;
 
 const Button = styled.button`
-  padding: 10px 20px;
+  padding: 12px 24px;
   margin: 5px;
   font-size: 1em;
   cursor: pointer;
   border: none;
-  border-radius: 4px;
-  background-color: #1e88e5;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #1e88e5, #1565c0);
   color: #fff;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    background-color: #1565c0;
+    background: linear-gradient(135deg, #1976d2, #0d47a1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 `;
 
@@ -335,16 +343,31 @@ const Answer = styled.div<{ correct: boolean }>`
   font-size: 1.1em;
   color: ${(props) => (props.correct ? "#4caf50" : "#f44336")};
   font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  text-align: center;
 `;
 
 const TimerDisplay = styled.div`
   margin-top: 10px;
   font-size: 1.2em;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 200px;
+  text-align: center;
 `;
 
 const GameOverContainer = styled.div`
   text-align: center;
-  margin-top: 100px;
+  margin-top: 50px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
 const FinalScore = styled.div`
