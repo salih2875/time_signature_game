@@ -186,8 +186,8 @@ const App: React.FC = () => {
       {!isGameOver && (
         <Header>
           <HP>❤️ HP: {hp}</HP>
-          <Score>Score: {score}</Score>
-          <HighScore>High Score: {highScore}</HighScore>
+          <Score>🏆 Score: {score}</Score>
+          <HighScore>🥇 High Score: {highScore}</HighScore>
         </Header>
       )}
       {!isGameOver ? (
@@ -249,9 +249,9 @@ export default App;
 
 /* Styled Components for a responsive layout */
 const Container = styled.div`
-  background-color: #121212;
+  background-color: #2c3e50; /* Updated to a dark soft blue */
   color: #fff;
-  height: 100%;
+  height: 100vh; /* Use full viewport height */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -261,11 +261,11 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
-  position: center;
-  // top: 10px;
-  // left: 10px;
-  text-align: left;
-  // background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: flex-start; /* Align items from left to right */
+  align-items: center;
+  gap: 20px;
   margin-bottom: 30px;
   padding: 10px;
   border-radius: 8px;
@@ -284,6 +284,7 @@ const Score = styled.div`
 
 const HighScore = styled.div`
   font-size: 1.2em;
+  margin-bottom: 5px;
 `;
 
 const InputContainer = styled.div`
@@ -363,6 +364,10 @@ const TimerDisplay = styled.div`
 `;
 
 const GameOverContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   margin-top: 50px;
   padding: 20px;
