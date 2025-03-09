@@ -131,20 +131,28 @@ const App: React.FC = () => {
   // Handle guess submission 🎯
   const handleSubmit = () => {
     if (showAnswer) return;
-    setShowAnswer(true);
+    
     if (guess.trim() === currentSong.timeSignature) {
+      // Correct answer - add score and move to next song immediately
       setScore((prev) => prev + 10);
+      
+      // Update high score if needed
+      if (score + 10 > highScore) {
+        localStorage.setItem("highScore", (score + 10).toString());
+        setHighScore(score + 10);
+      }
+      
+      // Move to next song immediately
+      handleNext();
     } else {
+      // Wrong answer - show the correct answer
+      setShowAnswer(true);
       setHp((prev) => prev - 1);
-    }
-    const potentialScore =
-      guess.trim() === currentSong.timeSignature ? score + 10 : score;
-    if (potentialScore > highScore) {
-      localStorage.setItem("highScore", potentialScore.toString());
-      setHighScore(potentialScore);
-    }
-    if (hp - (guess.trim() === currentSong.timeSignature ? 0 : 1) <= 0) {
-      setIsGameOver(true);
+      
+      // Check if game over
+      if (hp - 1 <= 0) {
+        setIsGameOver(true);
+      }
     }
   };
 
