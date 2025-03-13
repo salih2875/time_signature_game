@@ -87,7 +87,9 @@ const extractVideoId = (url: string): string => {
 };
 
 const App: React.FC = () => {
-  const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
+  const [currentSongIndex, setCurrentSongIndex] = useState<number>(() =>
+    Math.floor(Math.random() * songs.length)
+  );
   const [guess, setGuess] = useState<string>("");
   const [score, setScore] = useState<number>(0);
   const [hp, setHp] = useState<number>(3);
@@ -114,19 +116,19 @@ const App: React.FC = () => {
     return () => clearInterval(timerId);
   }, [timeLeft, isGameOver]);
 
-  // Timer effect ⏳
-  useEffect(() => {
-    if (isGameOver) return;
-    if (timeLeft === 0) {
-      handleSubmit();
-      handleNext();
-      return;
-    }
-    const timerId = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
-    return () => clearInterval(timerId);
-  }, [timeLeft, isGameOver]);
+  // Remove this duplicate timer effect
+  // useEffect(() => {
+  //   if (isGameOver) return;
+  //   if (timeLeft === 0) {
+  //     handleSubmit();
+  //     handleNext();
+  //     return;
+  //   }
+  //   const timerId = setInterval(() => {
+  //     setTimeLeft((prev) => prev - 1);
+  //   }, 1000);
+  //   return () => clearInterval(timerId);
+  // }, [timeLeft, isGameOver]);
 
   // Handle guess submission 🎯
   const handleSubmit = () => {
@@ -174,7 +176,7 @@ const App: React.FC = () => {
   const handlePlayAgain = () => {
     setScore(0);
     setHp(3);
-    setCurrentSongIndex(0);
+    setCurrentSongIndex(Math.floor(Math.random() * songs.length)); // Set to a random index
     setTimeLeft(90); // Reset to 90 seconds (1:30 minutes)
     setIsGameOver(false);
     setShowAnswer(false);
@@ -235,7 +237,7 @@ const App: React.FC = () => {
         </>
       ) : (
         <GameOverContainer>
-          <h2>Game Over 😢</h2>
+          <h2>Game Over</h2>
           <FinalScore>Your final score: {score}</FinalScore>
           <HighScoreDisplay>High Score: {highScore}</HighScoreDisplay>
           <Button onClick={handlePlayAgain}>Play Again 🔄</Button>
@@ -249,9 +251,10 @@ export default App;
 
 /* Styled Components for a responsive layout */
 const Container = styled.div`
-  background-color: #2c3e50; /* Updated to a dark soft blue */
+  background-color: #2c3e50;
   color: #fff;
-  height: 100vh; /* Use full viewport height */
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
