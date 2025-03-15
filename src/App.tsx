@@ -3,13 +3,14 @@ import React, { useState, useEffect } from "react";
 import YouTube from "react-youtube";
 import styled from "styled-components";
 
+// First, let's update the Song type to support multiple time signatures
 type Song = {
   id: number;
   title: string;
   youtubeUrl: string;
   startTime: number;
   endTime: number;
-  timeSignature: string;
+  timeSignature: string | string[]; // Can be a single string or array of strings
 };
 
 const songs: Song[] = [
@@ -99,7 +100,7 @@ const songs: Song[] = [
     youtubeUrl: "https://www.youtube.com/watch?v=yxXMJKCI9F0",
     startTime: 0,
     endTime: 30,
-    timeSignature: "7/8", // 7/4
+    timeSignature: ["7/8", "7/4"], // Multiple correct answers
   },
   {
     id: 12,
@@ -115,7 +116,7 @@ const songs: Song[] = [
     youtubeUrl: "https://www.youtube.com/watch?v=pG7_gceIFL4",
     startTime: 0,
     endTime: 30,
-    timeSignature: "5/8",
+    timeSignature: ["5/8", "5/4"],
   },
   {
     id: 14,
@@ -123,7 +124,7 @@ const songs: Song[] = [
     youtubeUrl: "https://www.youtube.com/watch?v=6DCmznTKXJg",
     startTime: 0,
     endTime: 35,
-    timeSignature: "7/8",
+    timeSignature: ["7/8", "7/4"],
   },
   {
     id: 15,
@@ -139,7 +140,7 @@ const songs: Song[] = [
     youtubeUrl: "https://www.youtube.com/watch?v=czj3_5VI7YE",
     startTime: 14,
     endTime: 35,
-    timeSignature: "7/8",
+    timeSignature: ["7/8", "7/4"],
   },
   {
     id: 17,
@@ -147,7 +148,7 @@ const songs: Song[] = [
     youtubeUrl: "https://www.youtube.com/watch?v=Si5CSpUCDGY",
     startTime: 0,
     endTime: 30,
-    timeSignature: "6/8",
+    timeSignature: ["6/4", "6/8"],
   },
   {
     id: 18,
@@ -155,7 +156,7 @@ const songs: Song[] = [
     youtubeUrl: "https://www.youtube.com/watch?v=rhzmNRtIp8k",
     startTime: 7,
     endTime: 20,
-    timeSignature: "7/8",
+    timeSignature: ["7/8", "7/4"],
   },
   {
     id: 19,
@@ -163,7 +164,7 @@ const songs: Song[] = [
     youtubeUrl: "https://www.youtube.com/watch?v=bndL7wwAj0U",
     startTime: 315,
     endTime: 345,
-    timeSignature: "11/4",
+    timeSignature: ["11/4", "11/8"],
   },
   {
     id: 20,
@@ -179,7 +180,7 @@ const songs: Song[] = [
     youtubeUrl: "https://www.youtube.com/watch?v=auLBLk4ibAk",
     startTime: 95,
     endTime: 120,
-    timeSignature: "7/8",
+    timeSignature: ["7/4", "7/8"],
   },
   {
     id: 22,
@@ -187,7 +188,7 @@ const songs: Song[] = [
     youtubeUrl: "https://www.youtube.com/watch?v=2aW7HweAf3o",
     startTime: 12,
     endTime: 35,
-    timeSignature: "7/4",
+    timeSignature: ["7/4", "7/8"],
   },
 ];
 
@@ -229,10 +230,16 @@ const App: React.FC = () => {
   }, [timeLeft, isGameOver]);
 
   // Handle guess submission 🎯
+  // Update the handleSubmit function to check for multiple correct answers
   const handleSubmit = () => {
     if (showAnswer) return;
 
-    if (guess.trim() === currentSong.timeSignature) {
+    // Convert timeSignature to array for consistent checking
+    const correctAnswers = Array.isArray(currentSong.timeSignature)
+      ? currentSong.timeSignature
+      : [currentSong.timeSignature];
+
+    if (correctAnswers.includes(guess.trim())) {
       // Correct answer - add score and move to next song immediately
       setScore((prev) => prev + 10);
 
@@ -320,8 +327,22 @@ const App: React.FC = () => {
             {!showAnswer && <Button onClick={handleSubmit}>Submit ✅</Button>}
             {showAnswer && (
               <>
-                <Answer correct={guess.trim() === currentSong.timeSignature}>
-                  {guess.trim() === currentSong.timeSignature
+                <Answer
+                  correct={
+                    Array.isArray(currentSong.timeSignature)
+                      ? currentSong.timeSignature.includes(guess.trim())
+                      : guess.trim() === currentSong.timeSignature
+                  }
+                >
+                  {Array.isArray(currentSong.timeSignature)
+                    ? currentSong.timeSignature.includes(guess.trim())
+                      ? "✓ Correct!"
+                      : `✗ Wrong! Correct answers: ${
+                          Array.isArray(currentSong.timeSignature)
+                            ? currentSong.timeSignature.join(" or ")
+                            : currentSong.timeSignature
+                        }`
+                    : guess.trim() === currentSong.timeSignature
                     ? "✓ Correct!"
                     : `✗ Wrong! Correct answer: ${currentSong.timeSignature}`}
                 </Answer>
