@@ -181,7 +181,14 @@ const songs: Song[] = [
     endTime: 120,
     timeSignature: "7/8",
   },
-  {},
+  {
+    id: 22,
+    title: "Pink Floyd - Money",
+    youtubeUrl: "https://www.youtube.com/watch?v=2aW7HweAf3o",
+    startTime: 12,
+    endTime: 35,
+    timeSignature: "7/4",
+  },
 ];
 
 const extractVideoId = (url: string): string => {
