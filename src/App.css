@@ -8,7 +8,7 @@
 html, body, #root {
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  overflow: auto; /* Changed from hidden to auto */
 }
 
 #root {
@@ -30,6 +30,13 @@ html, body, #root {
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+.youtube-container {
+  width: 100%;
+  max-width: 1000px;
+  /* Optional: Limit max width */
+  aspect-ratio: 16 / 9;
 }
 
 @keyframes logo-spin {

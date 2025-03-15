@@ -77,6 +77,111 @@ const songs: Song[] = [
     endTime: 30,
     timeSignature: "10/4",
   },
+  {
+    id: 9,
+    title: "Animals - Muse",
+    youtubeUrl: "https://www.youtube.com/watch?v=WnJz4eUV5qM",
+    startTime: 30,
+    endTime: 50,
+    timeSignature: "5/4",
+  },
+  {
+    id: 10,
+    title: "Stone Temple Pilots - Pretty Penny",
+    youtubeUrl: "https://www.youtube.com/watch?v=yL3CVO0nWE4",
+    startTime: 30,
+    endTime: 50,
+    timeSignature: "9/4",
+  },
+  {
+    id: 11,
+    title: "Yes - The Fish",
+    youtubeUrl: "https://www.youtube.com/watch?v=yxXMJKCI9F0",
+    startTime: 0,
+    endTime: 30,
+    timeSignature: "7/8", // 7/4
+  },
+  {
+    id: 12,
+    title: "Pearl Jam - Last Exit",
+    youtubeUrl: "https://www.youtube.com/watch?v=YQRyhKmkUUE",
+    startTime: 20,
+    endTime: 45,
+    timeSignature: "5/4",
+  },
+  {
+    id: 13,
+    title: "Sting - Seven Days",
+    youtubeUrl: "https://www.youtube.com/watch?v=pG7_gceIFL4",
+    startTime: 0,
+    endTime: 30,
+    timeSignature: "5/8",
+  },
+  {
+    id: 14,
+    title: "Temple Of The Dog - Pushin' Forward Back",
+    youtubeUrl: "https://www.youtube.com/watch?v=6DCmznTKXJg",
+    startTime: 0,
+    endTime: 35,
+    timeSignature: "7/8",
+  },
+  {
+    id: 15,
+    title: "Karnivool - Goliath",
+    youtubeUrl: "https://www.youtube.com/watch?v=sDKsosOvVmw",
+    startTime: 1,
+    endTime: 45,
+    timeSignature: "27/4",
+  },
+  {
+    id: 16,
+    title: "U.K. - In The Dead Of Night ",
+    youtubeUrl: "https://www.youtube.com/watch?v=czj3_5VI7YE",
+    startTime: 14,
+    endTime: 35,
+    timeSignature: "7/8",
+  },
+  {
+    id: 17,
+    title: "The Police - Synchronicity I",
+    youtubeUrl: "https://www.youtube.com/watch?v=Si5CSpUCDGY",
+    startTime: 0,
+    endTime: 30,
+    timeSignature: "6/8",
+  },
+  {
+    id: 18,
+    title: "Foo Fighters - Times Like These",
+    youtubeUrl: "https://www.youtube.com/watch?v=rhzmNRtIp8k",
+    startTime: 7,
+    endTime: 20,
+    timeSignature: "7/8",
+  },
+  {
+    id: 19,
+    title: "TOOL - Right In Two",
+    youtubeUrl: "https://www.youtube.com/watch?v=bndL7wwAj0U",
+    startTime: 315,
+    endTime: 345,
+    timeSignature: "11/4",
+  },
+  {
+    id: 20,
+    title: "Frank Zappa - Keep It Greasey",
+    youtubeUrl: "https://www.youtube.com/watch?v=FwAwA7SlD7M",
+    startTime: 35,
+    endTime: 55,
+    timeSignature: "19/16",
+  },
+  {
+    id: 21,
+    title: "Rush - Tom Sawyer",
+    youtubeUrl: "https://www.youtube.com/watch?v=auLBLk4ibAk",
+    startTime: 95,
+    endTime: 120,
+    timeSignature: "7/8",
+  },
+  {},
 ];
 
 const extractVideoId = (url: string): string => {
@@ -115,20 +220,6 @@ const App: React.FC = () => {
     }, 1000);
     return () => clearInterval(timerId);
   }, [timeLeft, isGameOver]);
-
-  // Remove this duplicate timer effect
-  // useEffect(() => {
-  //   if (isGameOver) return;
-  //   if (timeLeft === 0) {
-  //     handleSubmit();
-  //     handleNext();
-  //     return;
-  //   }
-  //   const timerId = setInterval(() => {
-  //     setTimeLeft((prev) => prev - 1);
-  //   }, 1000);
-  //   return () => clearInterval(timerId);
-  // }, [timeLeft, isGameOver]);
 
   // Handle guess submission 🎯
   const handleSubmit = () => {
@@ -204,7 +295,8 @@ const App: React.FC = () => {
                 start: currentSong.startTime,
                 end: currentSong.endTime,
                 mute: 0,
-                controls: 1,
+                controls: 0,
+                disablekb: 1,
               },
             }}
             onReady={(event) => {
@@ -253,12 +345,12 @@ export default App;
 const Container = styled.div`
   background-color: #2c3e50;
   color: #fff;
+  min-height: 100vh;
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Center content vertically */
+  justify-content: center;
   padding: 20px;
   box-sizing: border-box;
 `;
