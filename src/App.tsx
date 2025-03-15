@@ -203,6 +203,7 @@ const App: React.FC = () => {
   const [currentSongIndex, setCurrentSongIndex] = useState<number>(() =>
     Math.floor(Math.random() * songs.length)
   );
+  const [playedSongs, setPlayedSongs] = useState<Set<number>>(new Set());
   const [guess, setGuess] = useState<string>("");
   const [score, setScore] = useState<number>(0);
   const [hp, setHp] = useState<number>(3);
@@ -230,33 +231,26 @@ const App: React.FC = () => {
   }, [timeLeft, isGameOver]);
 
   // Handle guess submission 🎯
-  // Update the handleSubmit function to check for multiple correct answers
   const handleSubmit = () => {
     if (showAnswer) return;
 
-    // Convert timeSignature to array for consistent checking
     const correctAnswers = Array.isArray(currentSong.timeSignature)
       ? currentSong.timeSignature
       : [currentSong.timeSignature];
 
     if (correctAnswers.includes(guess.trim())) {
-      // Correct answer - add score and move to next song immediately
       setScore((prev) => prev + 10);
 
-      // Update high score if needed
       if (score + 10 > highScore) {
         localStorage.setItem("highScore", (score + 10).toString());
         setHighScore(score + 10);
       }
 
-      // Move to next song immediately
       handleNext();
     } else {
-      // Wrong answer - show the correct answer
       setShowAnswer(true);
       setHp((prev) => prev - 1);
 
-      // Check if game over
       if (hp - 1 <= 0) {
         setIsGameOver(true);
       }
@@ -268,12 +262,20 @@ const App: React.FC = () => {
     setGuess("");
     setShowAnswer(false);
 
-    // Generate a random index different from the current one
     let randomIndex;
+    const newPlayedSongs = new Set(playedSongs);
+    newPlayedSongs.add(currentSongIndex);
+
+    if (newPlayedSongs.size === songs.length) {
+      setIsGameOver(true); // End game if all songs have been played
+      return;
+    }
+
     do {
       randomIndex = Math.floor(Math.random() * songs.length);
-    } while (randomIndex === currentSongIndex && songs.length > 1);
+    } while (newPlayedSongs.has(randomIndex));
 
+    setPlayedSongs(newPlayedSongs);
     setCurrentSongIndex(randomIndex);
   };
 
@@ -281,6 +283,7 @@ const App: React.FC = () => {
   const handlePlayAgain = () => {
     setScore(0);
     setHp(3);
+    setPlayedSongs(new Set());
     setCurrentSongIndex(Math.floor(Math.random() * songs.length)); // Set to a random index
     setTimeLeft(90); // Reset to 90 seconds (1:30 minutes)
     setIsGameOver(false);
