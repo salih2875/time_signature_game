@@ -294,15 +294,13 @@ const App: React.FC = () => {
 
   return (
     <Container>
-      {!isGameOver && (
-        <Header>
-          <HP>❤️ HP: {hp}</HP>
-          <Score>🏆 Score: {score}</Score>
-          <HighScore>🥇 High Score: {highScore}</HighScore>
-        </Header>
-      )}
       {!isGameOver ? (
         <MainContent>
+          <Header>
+            <HP>❤️ HP: {hp}</HP>
+            <Score>🏆 Score: {score}</Score>
+            <HighScore>🥇 High Score: {highScore}</HighScore>
+          </Header>
           <VideoWrapper>
             <YouTube
               videoId={extractVideoId(currentSong.youtubeUrl)}
@@ -391,7 +389,8 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
-  flex: 0 0 auto;
+  // flex: 0 0 auto;
+  flex: 1;
   display: flex;
   background-color: rgba(0, 0, 0, 0.5);
   justify-content: center;
@@ -403,7 +402,8 @@ const Header = styled.div`
   margin-bottom: 10px;
 
   @media (max-width: 600px) {
-    flex-direction: column;
+    width: 100%;
+    flex-direction: row;
     gap: 10px;
   }
 `;
@@ -467,7 +467,7 @@ const InputContainer = styled.div`
     padding: 10px;
     font-size: 1em;
     margin-bottom: 10px;
-    width: 100%;
+    width: 95%;
     box-sizing: border-box;
     border-radius: 8px;
     border: 1px solid #ccc;
@@ -478,10 +478,14 @@ const InputContainer = styled.div`
       color: #888;
     }
   }
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
 const Button = styled.button`
-  flex: 1;
+  // flex: 1;
   padding: 12px 24px;
   margin: 5px;
   font-size: 1em;
@@ -527,8 +531,12 @@ const TimerDisplay = styled.div`
   border-radius: 8px;
   height: auto;
   width: 15%;
-  // max-width: 200px;
   text-align: center;
+  @media (max-width: 600px) {
+    width: 100%;
+    max-height: 5%;
+    flex-direction: row;
+  }
 `;
 
 const GameOverContainer = styled.div`
