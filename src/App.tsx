@@ -190,6 +190,7 @@ const songs: Song[] = [
     endTime: 35,
     timeSignature: ["7/4", "7/8"],
   },
+  {},
 ];
 
 const extractVideoId = (url: string): string => {
@@ -301,25 +302,28 @@ const App: React.FC = () => {
         </Header>
       )}
       {!isGameOver ? (
-        <>
-          <YouTube
-            videoId={extractVideoId(currentSong.youtubeUrl)}
-            opts={{
-              width: "1000px",
-              height: "500px",
-              playerVars: {
-                autoplay: 1,
-                start: currentSong.startTime,
-                end: currentSong.endTime,
-                mute: 0,
-                controls: 0,
-                disablekb: 1,
-              },
-            }}
-            onReady={(event) => {
-              event.target.playVideo();
-            }}
-          />
+        <MainContent>
+          <VideoWrapper>
+            <YouTube
+              videoId={extractVideoId(currentSong.youtubeUrl)}
+              opts={{
+                // The video will now fill its container
+                width: "100%",
+                height: "100%",
+                playerVars: {
+                  autoplay: 1,
+                  start: currentSong.startTime,
+                  end: currentSong.endTime,
+                  mute: 0,
+                  controls: 0,
+                  disablekb: 1,
+                },
+              }}
+              onReady={(event) => {
+                event.target.playVideo();
+              }}
+            />
+          </VideoWrapper>
           <InputContainer>
             <input
               type="text"
@@ -357,7 +361,7 @@ const App: React.FC = () => {
             Time Left: {Math.floor(timeLeft / 60)}:
             {(timeLeft % 60).toString().padStart(2, "0")} ⏳
           </TimerDisplay>
-        </>
+        </MainContent>
       ) : (
         <GameOverContainer>
           <h2>Game Over</h2>
@@ -376,53 +380,87 @@ export default App;
 const Container = styled.div`
   background-color: #2c3e50;
   color: #fff;
-  min-height: 100vh;
+  height: 100vh; /* Fill the full viewport height */
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
+  overflow: hidden; /* Prevents scrollbars */
 `;
 
 const Header = styled.div`
+  flex: 0 0 auto;
   display: flex;
   background-color: rgba(0, 0, 0, 0.5);
-  justify-content: flex-start; /* Align items from left to right */
+  justify-content: center;
   align-items: center;
   gap: 20px;
-  margin-bottom: 30px;
   padding: 10px;
   border-radius: 8px;
-  z-index: 10;
+  width: 50%;
+  margin-bottom: 10px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 const HP = styled.div`
   font-size: 1.2em;
-  margin-bottom: 5px;
 `;
 
 const Score = styled.div`
   font-size: 1.2em;
-  margin-bottom: 5px;
 `;
 
 const HighScore = styled.div`
   font-size: 1.2em;
-  margin-bottom: 5px;
 `;
 
-const InputContainer = styled.div`
-  margin-top: 20px;
+const MainContent = styled.div`
+  flex: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
+`;
+
+const VideoWrapper = styled.div`
   width: 100%;
-  max-width: 400px; /* Limit width for better mobile experience */
-  padding: 20px;
+  max-width: 800px;
+  /* Allocate about 50% of viewport height to the video */
+  flex: 0 0 50vh;
+  position: relative;
+  margin-bottom: 1rem;
+
+  & iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-height: 600px) {
+    flex: 0 0 40vh; /* Reduce video height on smaller screens */
+  }
+`;
+
+const InputContainer = styled.div`
+  // flex: 1 0 auto
+  flex: 1;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 25%;
+  padding: 1rem;
   background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 12px;
+  border-radius: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
   input {
@@ -443,6 +481,7 @@ const InputContainer = styled.div`
 `;
 
 const Button = styled.button`
+  flex: 1;
   padding: 12px 24px;
   margin: 5px;
   font-size: 1em;
@@ -467,6 +506,7 @@ const Button = styled.button`
 `;
 
 const Answer = styled.div<{ correct: boolean }>`
+  flex: 1;
   margin-top: 10px;
   font-size: 1.1em;
   color: ${(props) => (props.correct ? "#4caf50" : "#f44336")};
@@ -479,23 +519,27 @@ const Answer = styled.div<{ correct: boolean }>`
 `;
 
 const TimerDisplay = styled.div`
-  margin-top: 10px;
+  flex: 1;
+  margin-top: 1rem;
   font-size: 1.2em;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 10px;
   border-radius: 8px;
-  width: 100%;
-  max-width: 200px;
+  height: auto;
+  width: 15%;
+  // max-width: 200px;
   text-align: center;
 `;
 
 const GameOverContainer = styled.div`
   display: flex;
+  height: auto;
+  margin-top: auto;
+  margin-bottom: auto;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-top: 50px;
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 12px;
@@ -504,10 +548,10 @@ const GameOverContainer = styled.div`
 
 const FinalScore = styled.div`
   font-size: 1.3em;
-  margin-top: 10px;
+  margin-top: 1rem;
 `;
 
 const HighScoreDisplay = styled.div`
   font-size: 1.3em;
-  margin-top: 10px;
+  margin-top: 1rem;
 `;
