@@ -2,7 +2,42 @@ html, body, #root {
   background-color: #2c3e50;
   min-height: 100%;
   min-width: 100%;
-  overflow: hidden; /* Changed from hidden to auto to allow scrolling when needed */
+  overflow: hidden; 
+  font-family: 'Roboto', 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@400;600;700&display=swap');
+
+/* Typography styles */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+p, span, div, input, button {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
+
+/* button {
+  font-weight: 600;
+} */
+
+/* Responsive font sizes */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 12px;
+  }
 }
 
 

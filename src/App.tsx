@@ -190,7 +190,30 @@ const songs: Song[] = [
     endTime: 35,
     timeSignature: ["7/4", "7/8"],
   },
-  {},
+  {
+    id: 23,
+    title: "Near's Theme (A) - Death Note",
+    youtubeUrl: "https://www.youtube.com/watch?v=WJW_ldC7sUA",
+    startTime: 0,
+    endTime: 20,
+    timeSignature: ["7/4", "7/8"],
+  },
+  {
+    id: 24,
+    title: "Mello's Theme (A) - Death Note",
+    youtubeUrl: "https://www.youtube.com/watch?v=BA4l6jrOSes",
+    startTime: 100,
+    endTime: 135,
+    timeSignature: ["3/4"],
+  },
+  {
+    id: 25,
+    title: "Marvel’s Ant Man: Official Main Theme (by Christophe Beck)",
+    youtubeUrl: "https://www.youtube.com/watch?v=O_5NwVy8L5M&t=12s",
+    startTime: 65,
+    endTime: 90,
+    timeSignature: ["7/4", "7/8"],
+  },
 ];
 
 const extractVideoId = (url: string): string => {
