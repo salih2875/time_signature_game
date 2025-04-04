@@ -490,13 +490,18 @@ const App: React.FC = () => {
             />
           </VideoWrapper>
           <InputContainer>
-            <input
-              type="text"
-              value={guess}
-              onChange={(e) => setGuess(e.target.value)}
-              placeholder="Enter time signature e.g., 4/4"
-            />
-            {!showAnswer && <Button onClick={handleSubmit}>Submit ✅</Button>}
+            {!showAnswer && (
+              <>
+                {" "}
+                <input
+                  type="text"
+                  value={guess}
+                  onChange={(e) => setGuess(e.target.value)}
+                  placeholder="Enter time signature e.g., 4/4"
+                />
+                <Button onClick={handleSubmit}>Submit ✅</Button>
+              </>
+            )}
             {showAnswer && (
               <>
                 <Answer
