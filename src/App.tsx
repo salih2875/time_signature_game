@@ -1,7 +1,8 @@
 // App.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import YouTube from "react-youtube";
 import styled from "styled-components";
+import Header from "./Header";
 
 // First, let's update the Song type to support multiple time signatures
 type Song = {
@@ -382,7 +383,7 @@ const App: React.FC = () => {
     const savedHighScore = localStorage.getItem("highScore");
     return savedHighScore ? parseInt(savedHighScore) : 0;
   });
-
+  const headerRef = useRef<HTMLDivElement>(null);
   const currentSong = songs[currentSongIndex];
 
   // Global timer effect ⏳
@@ -423,6 +424,7 @@ const App: React.FC = () => {
         setIsGameOver(true);
       }
     }
+    headerRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   // Load next song randomly 🎲
@@ -463,7 +465,7 @@ const App: React.FC = () => {
     <Container>
       {!isGameOver ? (
         <MainContent>
-          <Header>
+          <Header ref={headerRef}>
             <HP>❤️ HP: {hp}</HP>
             <Score>🏆 Score: {score}</Score>
             <HighScore>🥇 High Score: {highScore}</HighScore>
@@ -550,7 +552,7 @@ export default App;
 const Container = styled.div`
   background-color: #2c3e50;
   color: #fff;
-  height: 100vh; /* Fill the full viewport height */
+  height: 100dvh; /* Fill the full viewport height */
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -558,26 +560,6 @@ const Container = styled.div`
   // padding: 10px;
   box-sizing: border-box;
   overflow: hidden; /* Prevents scrollbars */
-`;
-
-const Header = styled.div`
-  // flex: 0 0 auto;
-  flex: 1;
-  display: flex;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  padding: 10px;
-  border-radius: 8px;
-  width: 50%;
-  margin-bottom: 10px;
-
-  @media (max-width: 600px) {
-    width: 100%;
-    flex-direction: row;
-    gap: 10px;
-  }
 `;
 
 const HP = styled.div`
@@ -624,7 +606,7 @@ const VideoWrapper = styled.div`
 
 const InputContainer = styled.div`
   // flex: 1 0 auto
-  flex: 1;
+  // flex: 1;
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
@@ -637,7 +619,7 @@ const InputContainer = styled.div`
 
   input {
     padding: 10px;
-    font-size: 1em;
+    font-size: 16px;
     margin-bottom: 10px;
     width: 95%;
     box-sizing: border-box;
@@ -653,6 +635,7 @@ const InputContainer = styled.div`
 
   @media (max-width: 600px) {
     width: 100%;
+    margin-top: 2em;
   }
 `;
 
@@ -696,7 +679,7 @@ const Answer = styled.div<{ correct: boolean }>`
 
 const TimerDisplay = styled.div`
   flex: 1;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   font-size: 1.2em;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 10px;
@@ -705,6 +688,7 @@ const TimerDisplay = styled.div`
   width: 15%;
   text-align: center;
   @media (max-width: 600px) {
+    margin-top: 3em;
     width: 100%;
     max-height: 5%;
     flex-direction: row;
