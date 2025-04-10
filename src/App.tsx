@@ -500,6 +500,11 @@ const App: React.FC = () => {
                   value={guess}
                   onChange={(e) => setGuess(e.target.value)}
                   placeholder="Enter time signature e.g., 4/4"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSubmit();
+                    }
+                  }}
                 />
                 <Button onClick={handleSubmit}>Submit ✅</Button>
               </>
